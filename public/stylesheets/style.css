@@ -9,6 +9,12 @@ a {
   color: #00B7FF;
 }
 
+h1 {
+  margin-top: 0px;
+text-align: center;
+
+}
+
 .monitor {
 	margin: 10px;
 	padding: 10px;
@@ -21,8 +27,11 @@ a {
    margin: 5px;
    padding-left: 5px;
    padding-bottom: 5px;
+   padding-right: 5px;
    background-color:rgba(255,255,255,0.2);
 }
+
+
 
 .timer {
    margin: 5px;
@@ -46,3 +55,8 @@ a {
 .etco2 {
 	color: gray;
 }
+
+IMG.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto }

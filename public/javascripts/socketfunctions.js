@@ -34,4 +34,6 @@ $('form').submit(function(){
 //  socket.on('time seconds', function(msg){
 //    document.getElementById('time').innerHTML = msg;
 //  });
-
+  socket.on('chat message', function(msg){
+    $('#messages').append($('<li>').text(msg));
+  });

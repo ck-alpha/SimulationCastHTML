@@ -154,6 +154,9 @@ io.on('connection', function(socket){
     io.emit('time seconds', msg);
     time = msg;
   });
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
 });
 
 
