@@ -1,0 +1,36 @@
+
+extends layout
+
+block content
+  h2 Patient Vital Signs
+  include patientmonitor.html
+  h2 Moderator Control
+  div
+  form(action="")
+    div(data-role='fieldcontain')
+     fieldset(data-role='controlgroup')
+        label(for='description') Scenario
+        br
+        input(id='description',type='text',value='',name='description')
+        br
+        label(for='hr') Heart Rate
+        input(id='hr',type='number',value='',name='hr')
+        br
+        label(for='sat') SatO2
+        input(id='sat',type='number',value='',name='sat')
+        br
+        label(for='sbp') BP
+        input(id='sbp',type='number',value='',name='sbp')
+        |  / 
+        input(id='dbp',type='number',value='',name='dbp')
+        br
+        label(for='etco2') etCO2
+        input(id='etco2',type='number',value='',name='etco2',step='0.1')
+        br
+        input(type="Submit", value="Submit")
+  #container.stopwatch
+
+
+ 
+
+

@@ -1,0 +1,160 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('SimulationCast:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+
+/**
+* Initialise IO
+*/
+
+var io = require('socket.io')(server);
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+// Initialise variables
+
+var description = "A 75 year old man is undergoing a total hip replacement under general anaesthetic. During cementing of the hip prosthesis, the blood pressure is noted to be low.";
+var hr = 60;
+var sato2 = 99;
+var sbp = 120;
+var dbp = 80;
+var etco2 = 4.8;
+var time = 0;
+
+// Message on user connection and disconnection to Socket.io system
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  //emit update on user connection
+  io.emit('description scenario', description);
+  io.emit('heart rate', hr);
+  io.emit('o2 sats', sato2);
+  io.emit('systolic bp', sbp);
+  io.emit('diastolic bp', dbp);
+  io.emit('endtidal co2', etco2);
+  io.emit('time seconds', time);
+  //disconnect
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+});
+
+// On submission, server to emit values and update variables
+
+io.on('connection', function(socket){
+  socket.on('description scenario', function(msg){
+    io.emit('description scenario', msg);
+    description = msg;
+  });
+  socket.on('heart rate', function(msg){
+    io.emit('heart rate', msg);
+    hr = msg;
+  });
+  socket.on('o2 sats', function(msg){
+    io.emit('o2 sats', msg);
+    sato2 = msg;
+  });
+  socket.on('systolic bp', function(msg){
+    io.emit('systolic bp', msg);
+    sbp = msg;
+  });
+  socket.on('diastolic bp', function(msg){
+    io.emit('diastolic bp', msg);
+    dbp = msg;
+  });
+  socket.on('endtidal co2', function(msg){
+    io.emit('endtidal co2', msg);
+    etco2 = msg;
+  });
+  socket.on('time seconds', function(msg){
+    io.emit('time seconds', msg);
+    time = msg;
+  });
+});
+
+
+
